@@ -6,6 +6,7 @@ using Photon.Pun;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using System.Security;
+using UnityEditor;
 
 public class sommin : MonoBehaviourPun
 {
@@ -27,6 +28,8 @@ public class sommin : MonoBehaviourPun
     [SerializeField]
     public bool IsJumping = false;
     [SerializeField]
+    public bool MenuOpen = false;
+    [SerializeField]
     public float JumpForce ;
     [SerializeField]
     public Rigidbody bullet;
@@ -47,10 +50,18 @@ public class sommin : MonoBehaviourPun
     [SerializeField]
     public bool IsReloading = false;
     [SerializeField] public Transform playerCamera;
+    [SerializeField]
     private float xRotation = 0f;
+    [SerializeField]
+    public GameObject escscreen;
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        if (photonView.IsMine)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+            
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         if (!photonView.IsMine)
@@ -79,6 +90,12 @@ public class sommin : MonoBehaviourPun
         {
             return; 
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MenuShow();
+        }
+        if(MenuOpen) return;
+
         text.text = "AMMO:"+currentammo+"HEALTH:"+health;
         float translation = Input.GetAxis("Vertical") * speed;
         float rotation = Input.GetAxis("Horizontal") * speed;
@@ -97,34 +114,7 @@ public class sommin : MonoBehaviourPun
             IsOnGround = false;
             animator.SetBool("IsJumping", true);
         }
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        // Get the raw mouse inputs
-        float mouseX = Input.GetAxis("Mouse X") * MouseSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * MouseSensitivity;
-        transform.Rotate(Vector3.up * mouseX);
-        xRotation -= mouseY; 
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        Vector3 moveVelocity = (transform.forward * translation * speed) + (transform.right * rotation * speed);
-        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
-        if (Input.GetKey(KeyCode.LeftShift) && IsOnGround && Input.GetAxis("Vertical") != 0)
-        {
-            speed = 15f;
-            animator.SetBool("IsRunning", true); 
-        }
-        else
-        {
-            speed = 10f; 
-            animator.SetBool("IsRunning", false);
-        }
-        
-        
-    }
-    public void LateUpdate()
-    {
+
         if (Input.GetButton("Fire1") && Time.time >= nexttime)
         {
             if (currentammo > 0)
@@ -149,6 +139,27 @@ public class sommin : MonoBehaviourPun
         {
             animator.SetBool("IsShootingGun", false);
         }
+        // Get the raw mouse inputs
+        float mouseX = Input.GetAxis("Mouse X") * MouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * MouseSensitivity;
+        transform.Rotate(Vector3.up * mouseX);
+        xRotation -= mouseY; 
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        Vector3 moveVelocity = (transform.forward * translation * speed) + (transform.right * rotation * speed);
+        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+        if (Input.GetKey(KeyCode.LeftShift) && IsOnGround && Input.GetAxis("Vertical") != 0)
+        {
+            speed = 15f;
+            animator.SetBool("IsRunning", true); 
+        }
+        else
+        {
+            speed = 10f; 
+            animator.SetBool("IsRunning", false);
+        }
+        
+        
     }
     public void takedmg(int damageamount)
     {
@@ -218,5 +229,28 @@ public class sommin : MonoBehaviourPun
         currentammo= 60;
         animator.SetBool("IsReloading",false);
         IsReloading = false;
+    }
+    public void MenuShow()
+    {
+        MenuOpen = !MenuOpen; // Flips between true and false
+        escscreen.SetActive(MenuOpen); // Turns the canvas on and off
+
+        if (MenuOpen)
+        {
+            // Unlock the mouse so you can click buttons
+            Cursor.lockState = CursorLockMode.None; 
+            Cursor.visible = true;
+        }
+        else
+        {
+            // Lock the mouse back to the game
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+    public void LeaveMatch()
+    {
+        PhotonNetwork.LeaveRoom(); 
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0); 
     }
 }
