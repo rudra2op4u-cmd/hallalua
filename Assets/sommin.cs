@@ -12,6 +12,8 @@ public class sommin : MonoBehaviourPun
 {
     // Start is called before the first frame update
     [SerializeField]
+    public ParticleSystem ps;
+    [SerializeField]
     public Animator animator;
     [SerializeField]
     public string Floor ;
@@ -64,6 +66,7 @@ public class sommin : MonoBehaviourPun
             
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        ps = GetComponentInChildren<ParticleSystem>();
         if (!photonView.IsMine)
         {
             // Try to find the camera. ONLY turn it off if it actually exists!
@@ -119,8 +122,15 @@ public class sommin : MonoBehaviourPun
         {
             if (currentammo > 0)
             {
+                var emission = ps.emission;
+                emission.enabled = true;
                 Shoot();
                 nexttime = Time.time + timeInterval;
+            }
+            else
+            {
+                var emission = ps.emission;
+                emission.enabled = false;
             }
             if (currentammo <= 0 && !IsReloading)
             {
