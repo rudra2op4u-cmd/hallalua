@@ -5495,6 +5495,15 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: IsReloading
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsShootingPistol
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsShootingAK
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsShootingRifle
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -5547,7 +5556,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
