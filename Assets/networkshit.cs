@@ -1,13 +1,14 @@
 using UnityEngine;
-using Photon.Pun; // This tells the script to use the Photon networking library
+using Photon.Pun;
 using UnityEngine.UI;
+using TMPro;
 
 public class networkshit : MonoBehaviourPunCallbacks 
 {
-    public Dropdown mapselector;
+    public TMP_Dropdown mapselector;
     public string map = "map1";
     public Button a;
-    public InputField b;
+    public TMP_InputField b;
     public bool ServerStarted = false;
     void Start()
     {
@@ -18,7 +19,6 @@ public class networkshit : MonoBehaviourPunCallbacks
     }
     void Update()
     {
-        Debug.Log(""+mapselector.value);
         if (b.text != "" && ServerStarted)
         {
             a.interactable = true;
