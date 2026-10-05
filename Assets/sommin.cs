@@ -122,8 +122,6 @@ public class sommin : MonoBehaviourPun
         {
             if (currentammo > 0)
             {
-                var emission = ps.emission;
-                emission.enabled = true;
                 Shoot();
                 nexttime = Time.time + timeInterval;
             }
@@ -139,6 +137,11 @@ public class sommin : MonoBehaviourPun
                 Invoke("Reload",3.2f);
                 
             }
+        }
+        else
+        {
+            var emission = ps.emission;
+            emission.enabled = true;
         }
         if (Input.GetKeyDown(KeyCode.R) && !IsReloading)
         {
