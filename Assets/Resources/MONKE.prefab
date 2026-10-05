@@ -5393,6 +5393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3de00f0e1ad464eafc18fec40a62d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ps: {fileID: 2294177248745024471}
   animator: {fileID: 7191503721385065583}
   Floor: Floor
   rb: {fileID: 3650113766106235654}
