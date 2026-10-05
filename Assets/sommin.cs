@@ -125,7 +125,7 @@ public class sommin : MonoBehaviourPun
                 Shoot();
                 nexttime = Time.time + timeInterval;
             }
-            else
+            if(Input.GetButtonDown("Fire1"))
             {
                 var emission = ps.emission;
                 emission.enabled = false;
