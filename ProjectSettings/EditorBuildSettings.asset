@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/map1.unity
     guid: e382454664a320b4e874b9e76743d291
+  - enabled: 1
+    path: Assets/Scenes/Parkour.unity
+    guid: 63f32b019f07035438e5e0efca1dbf99
   m_configObjects: {}

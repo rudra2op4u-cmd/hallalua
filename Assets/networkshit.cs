@@ -35,6 +35,10 @@ public class networkshit : MonoBehaviourPunCallbacks
         {
             map = "map1";
         }
+        if (mapselector.value == 2)
+        {
+            map = "Parkour";
+        }
     }
     public override void OnConnectedToMaster()
     {
