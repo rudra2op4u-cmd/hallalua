@@ -8,7 +8,8 @@ public class grenadegowheee : MonoBehaviourPun
     public float delay = 3f;
     public float blastRadius = 22.5f;
     public int explosionDamage = 75;
-
+    public GameObject explosionParticles;
+    public GameObject explosionSound;
     void Start()
     {
         if (photonView.IsMine)
@@ -32,5 +33,14 @@ public class grenadegowheee : MonoBehaviourPun
 
         // 3. Delete the grenade from the server
         PhotonNetwork.Destroy(gameObject);
+    }
+    void OnDistroy()
+    {
+        explosionParticles.transform.SetParent(null);
+        explosionSound.transform.SetParent(null);
+        explosionParticles.SetActive(true);
+        explosionSound.SetActive(true);
+        Destroy(explosionParticles, 2f);
+        Destroy(explosionSound, 2f);
     }
 }
