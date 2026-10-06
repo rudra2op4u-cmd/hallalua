@@ -56,6 +56,8 @@ public class sommin : MonoBehaviourPun
     private float xRotation = 0f;
     [SerializeField]
     public GameObject escscreen;
+    [SerializeField]
+    public int GrenadesLeft;
     void Start()
     {
         if (photonView.IsMine)
@@ -117,7 +119,10 @@ public class sommin : MonoBehaviourPun
             IsOnGround = false;
             animator.SetBool("IsJumping", true);
         }
-
+        if (Input.GetKeyDown(KeyCode.G) && GrenadesLeft != 0)
+        {
+            ThrowGrenade();
+        }
         if (Input.GetButton("Fire1") && Time.time >= nexttime)
         {
             if (currentammo > 0)
@@ -265,5 +270,20 @@ public class sommin : MonoBehaviourPun
     {
         PhotonNetwork.LeaveRoom(); 
         UnityEngine.SceneManagement.SceneManager.LoadScene(0); 
+    }
+    void ThrowGrenade()
+    {
+        GrenadesLeft -= 1;
+        animator.SetBool("IsShootingGun", true); // You can use the shoot animation for now!
+        Invoke("ResetShootAnim", 0.5f);
+
+        // 1. Spawn the grenade on the network
+        GameObject nade = PhotonNetwork.Instantiate("grenade", barrel.transform.position, barrel.transform.rotation);
+        
+        // 2. Grab its physics body
+        Rigidbody rb = nade.GetComponent<Rigidbody>();
+
+        // 3. Throw it in a nice arc (Forward force + Upward force)
+        rb.AddForce(playerCamera.transform.forward * 15f + playerCamera.transform.up * 5f, ForceMode.Impulse);
     }
 }
