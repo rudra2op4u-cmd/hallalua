@@ -5416,6 +5416,7 @@ MonoBehaviour:
   playerCamera: {fileID: 3650113766867138259}
   xRotation: 0
   escscreen: {fileID: 4025941539590631914}
+  GrenadesLeft: 3
 --- !u!114 &4749572707108299771
 MonoBehaviour:
   m_ObjectHideFlags: 0
