@@ -1,18 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class grenadegowheee : MonoBehaviour
+public class grenadegowheee : MonoBehaviourPun
 {
-    // Start is called before the first frame update
+    public float delay = 3f;
+    public float blastRadius = 22.5f;
+    public int explosionDamage = 75;
+
     void Start()
     {
-        
+        if (photonView.IsMine)
+        {
+            Invoke("Explode", delay);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void Explode()
     {
-        
+        Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius);
+        foreach (Collider nearbyObject in colliders)
+        {
+            sommin targetHealth = nearbyObject.GetComponent<sommin>();
+            
+            if (targetHealth != null)
+            {
+                targetHealth.photonView.RPC("SyncDamage", RpcTarget.All, explosionDamage);
+            }
+        }
+
+        // 3. Delete the grenade from the server
+        PhotonNetwork.Destroy(gameObject);
     }
 }
